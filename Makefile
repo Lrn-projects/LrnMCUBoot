@@ -2,7 +2,7 @@ MCU = atmega4809
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 CFLAGS = -mmcu=$(MCU) -nostartfiles -Os
-SIMULATOR = simavr
+SIMULATOR = qemu-system-avr
 SRCDIR = src/
 OUTDIR = build/
 
@@ -21,7 +21,7 @@ flash: init.hex
 	avrdude -c <PROGRAMMER> -p $(MCU) -U flash:w:init.hex
 
 simulate: init.elf
-	$(SIMULATOR) -m $(MCU) -f 1000000 $(OUTDIR)init.elf
+	$(SIMULATOR) -machine mega2560 -bios $(OUTDIR)init.elf -nographic
 
 clean:
 	rm -f $(OUTDIR)*
