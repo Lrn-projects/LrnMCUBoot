@@ -1,5 +1,6 @@
 .section .entry
 .global _start
+.extern main
 
 .data
   // reserved 4 octets to store an adr
@@ -13,4 +14,6 @@ _start:
   l32r    a2, stack_base
   // store 32 bits integer from a2 to sp
   s32i    sp, a2, 0
-  call4 main
+  call0 main
+  // infinite recursivity
+  j _start
