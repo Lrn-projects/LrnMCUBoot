@@ -1,12 +1,16 @@
-.equ RAMEND, 0x8ff
-.equ SPL, 0x3d
-.equ SPH, 0x3e
+.section .entry
+.global _start
 
-init:
-  ldi r16,lo8(RAMEND)
-  out SPL,r16
-  ldi r16,hi8(RAMEND)
-  out SPH,r16
+.data
+  // reserved 4 octets to store an adr
+  stack_base: .word 0 
 
-main:
-  rjmp main
+_start:
+  // alloc 16 octets on the stack
+  entry   sp, 16
+  .literal_position
+  // load 32 bits from literal &stack_base in a2 register
+  l32r    a2, stack_base
+  // store 32 bits integer from a2 to sp
+  s32i    sp, a2, 0
+  call4 main
